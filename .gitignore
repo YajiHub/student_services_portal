@@ -3,6 +3,7 @@ node_modules/
 
 # Production builds
 dist/
+laboratory_material/
 
 # Environment variables
 .env
