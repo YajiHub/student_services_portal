@@ -6,65 +6,50 @@ interface Student {
 }
 
 /**
- * Enum representing valid student status values.
- * Using enum ensures type-safety and eliminates magic strings.
+ * Type guard to check if a value is a valid student status.
+ * 
+ * @param status - The value to check
+ * @returns True if the value is a valid student status ("active" or "inactive")
  */
-export enum StudentStatus {
-  Active = "active";
-  Inactive = "inactive";
+function isValidStudentStatus(status: string): status is "active" | "inactive" {
+  return status === "active" || status === "inactive";
 }
-
-/**
- * Union type of all valid student status values.
- * Used for function parameter typing to maintain type-safety.
- */
-export type StudentStatusValue = StudentStatus.Active | StudentStatus.Inactive;
 
 /**
  * Converts a student status value to a user-friendly label.
  * 
  * @param status - The student status value (must be "active" or "inactive")
  * @returns A user-friendly label string ("Active Student" or "Inactive Student")
- * @throws {Error} If status is not a valid StudentStatusValue (compile-time guaranteed, runtime safe)
  */
-export function formatStudentStatus(status: StudentStatusValue): string {
+function formatStudentStatus(status: "active" | "inactive"): string {
   switch (status) {
-    case StudentStatus.Active:
+    case "active":
       return "Active Student";
-    case StudentStatus.Inactive:
+    case "inactive":
       return "Inactive Student";
     default:
-      // This default should never be reached if type is correct at compile time
-      // But we handle it for runtime safety
-      return `Unknown Student Status: "${status}"`;
+      return "Unknown Student Status";
   }
 }
 
 /**
  * Safely formats a student status, handling edge cases and invalid inputs.
- * Does NOT use the "any" type - uses "unknown" with type guards.
+ * Does NOT use the `any` type - uses string type guards.
  * 
  * @param status - The status value (could be string, number, null, undefined, etc.)
  * @returns A user-friendly label or a safe fallback string
  */
-export function safeFormatStudentStatus(status: unknown): string {
-  // Type guard: check if status is a valid string
+function safeFormatStudentStatus(status: unknown): string {
   if (typeof status !== "string") {
     return "Invalid Status: non-string value provided";
   }
-
-  // Check for empty string
   if (status.trim() === "") {
     return "Invalid Status: empty string provided";
   }
-
-  // Try to format as valid student status using type narrowing
-  if (status === StudentStatus.Active || status === StudentStatus.Inactive) {
+  if (isValidStudentStatus(status)) {
     return formatStudentStatus(status);
   }
-
-  // Handle unexpected string values safely
-  return `Student Status: "${status}" (unknown format)`;
+  return "Student Status: " + status + " (unknown format)";
 }
 
 /**
@@ -73,7 +58,7 @@ export function safeFormatStudentStatus(status: unknown): string {
  * @returns A formatted string representation of the student
  */
 function formatStudent(student: Student): string {
-  return `${student.id} - ${student.name} (${student.status})`;
+  return student.id + " - " + student.name + " (" + student.status + ")";
 }
 
 // Create a sample student and display the result
@@ -81,19 +66,16 @@ const sampleStudent: Student = {
   id: 1001;
   name: "Maria Santos";
   email: "maria.santos@university.edu";
-  status: StudentStatus.Active;
+  status: "active";
 };
 
 console.log("Sample Student:");
 console.log(formatStudent(sampleStudent));
 
 // Test the status formatter
-console.log("\nStatus Formatter Tests:");
-console.log("Active:", formatStudentStatus(StudentStatus.Active));
-console.log("Inactive:", formatStudentStatus(StudentStatus.Inactive));
+console.log("Active:", formatStudentStatus("active"));
+console.log("Inactive:", formatStudentStatus("inactive"));
 console.log("Safe null:", safeFormatStudentStatus(null));
 console.log("Safe undefined:", safeFormatStudentStatus(undefined));
 console.log("Safe number:", safeFormatStudentStatus(123));
 console.log("Safe invalid string:", safeFormatStudentStatus("pending"));
-
-// Compile check: Run with: npx tsc
