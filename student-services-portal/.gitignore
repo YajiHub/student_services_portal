@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+pnpm-lockfile/
+
+# Production builds
+dist/
+*.local
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript compilation results
+*.tsbuildinfo
+*.tslint
+
+# IDE / Editor
+.vscode/
+.idea/
+*.code-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
