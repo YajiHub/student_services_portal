@@ -1,13 +1,15 @@
 {
   "name": "student_services_portal",
   "version": "1.0.0",
-  "description": "",
+  "description": "University Student Services Portal - TypeScript, GitHub, and AI-Assisted Development Workflow",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Junior Developer",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
